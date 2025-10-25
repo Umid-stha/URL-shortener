@@ -3,3 +3,5 @@ pillow
 python-decouple
 qrcode
 gunicorn
+psycopg[binary]
+dj-database-url

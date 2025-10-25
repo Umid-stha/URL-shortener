@@ -24,8 +24,8 @@ User = get_user_model()
 # Create your models here.
 class ShortUrl(models.Model):
     original_link = models.URLField()
-    custom_short_url = models.TextField(null=True, blank=True, unique=True)
-    short_url = models.CharField(max_length=7, null=True, blank=True, unique=True)
+    custom_short_url = models.TextField(null=True, blank=True, unique=True, db_index=True)
+    short_url = models.CharField(max_length=7, null=True, blank=True, unique=True, db_index=True)
 
     expiration_date = models.DateField(null=True, blank=True)
     clicks = models.IntegerField(default=0)
