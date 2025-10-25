@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<main class="form-container">
+  <section class="form-card">
+    <h2>Generate Custom QR Code</h2>
+    <p class="subtitle">Turn any text into a QR Code.</p>
+
+    <form method="POST" action="{% url 'qr-gen' %}" class="url-form">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="long_url">URL/Link</label>
+        <input type="url" id="long_url" name="data" placeholder="Website, text or anything to be turned into QR" required />
+      </div>
+
+      <button type="submit" class="submit-btn">Generate QR code</button>
+    </form>
+  </section>
+</main>
+
+{% endblock %}
+

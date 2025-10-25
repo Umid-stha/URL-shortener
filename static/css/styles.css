@@ -101,6 +101,9 @@ body {
   }
   
   .register-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: var(--color-surface);
     color: var(--color-primary);
     border: 1px solid var(--color-primary);
@@ -422,8 +425,13 @@ body {
 
   .checkbox {
     display: flex;
+    flex-direction: row;
     align-items: center;
     gap: 0.5rem;
+  }
+
+  .generate_qr {
+    margin-top: 8px;
   }
 
   .checkbox label {
@@ -522,6 +530,12 @@ body {
 
 .qr-section {
   margin-top: 2rem;
+}
+
+.qr-result {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .qr-section h3 {
@@ -683,6 +697,10 @@ body {
 }
 
 .copy-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 3px;
   padding: 8px 16px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);

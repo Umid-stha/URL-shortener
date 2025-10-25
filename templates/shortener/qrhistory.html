@@ -1,0 +1,63 @@
+{% extends 'index.html' %}
+{% block content %}
+
+{% load static %}
+<div class="links-container">
+  <div class="header-section">
+    <h1 class="page-title">My QR</h1>
+    <a href="{% url 'qr-gen' %}" class="create-link-btn">+ Create New QR</a>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Total QR codes made: </div>
+      <div class="stat-value">{{ qr_codes.count }}</div>
+    </div>
+  </div>
+
+  {% if qr_codes %}
+  <div class="links-list">
+    {% for qr_code in qr_codes %}
+    <div class="link-card">
+      <div class="link-header">
+        <img height="150" src="{{qr_code.qr_code_url }}" />
+        <div class="link-info">
+          <div class="original-url">
+            {{ qr_code.data|truncatechars:60 }}
+          </div>
+          
+          <div class="short-url-container">
+            <a href="{{ qr_code.qr_code_url }}" download class="link">
+                <button class="copy-btn">
+                    Download <img height="20" src="{% static 'images/download.svg' %}" />
+                </button>
+            </a>
+          </div>
+        </div>
+
+        <div class="link-actions">
+          <form method="POST" action="{% url 'delete-qr' qr_code.id %}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this link?');">
+            {% csrf_token %}
+            <button type="submit" class="action-btn delete-btn">Delete</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="link-meta">
+        <div class="meta-item">
+          <span>Created: <span class="meta-value">{{ qr_code.created_at|date:"M d, Y" }}</span></span>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h2 class="empty-state-title">No QR codes yet</h2>
+    <p class="empty-state-text">Create your first QR code to get started!</p>
+    <a href="{% url 'qr-gen' %}" class="create-link-btn">Create Your First QR</a>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

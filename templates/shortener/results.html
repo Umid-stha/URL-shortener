@@ -2,7 +2,11 @@
 {% block content %}
 <section class="result-container">
   <div class="result-card">
-    <h2>✨ Your Short URL is Ready!</h2>
+    {% if edit %}
+      <h2>✨ URL Edited Succesfully!</h2>
+    {% else %}
+      <h2>✨ Your Short URL is Ready!</h2>
+    {% endif %}
 
     <div class="url-block">
       <label>Original URL:</label>

@@ -35,15 +35,21 @@
         </a>
       </li>
       <li>
-        <a href="#qr-generator">
+        <a href="{% url 'form' %}" class="{% if request.resolver_match.url_name == 'form' %}active{% endif %}">
+          <span class="nav-icon"><img height="20" src="{% static 'images/shortner.svg' %}" /></span>
+          <span>Link Shortener</span>
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'qr-gen' %}" class="{% if request.resolver_match.url_name == 'qr-gen' %}active{% endif %}">
           <span class="nav-icon"><img height="20" src="{% static 'images/qrcode.svg' %}" /></span>
           <span>QR Generator</span>
         </a>
       </li>
       <li>
-        <a href="{% url 'form' %}" class="{% if request.resolver_match.url_name == 'form' %}active{% endif %}">
-          <span class="nav-icon"><img height="20" src="{% static 'images/shortner.svg' %}" /></span>
-          <span>Link Shortener</span>
+        <a href="{% url 'qr-history' %}" class="{% if request.resolver_match.url_name == 'qr-history' %}active{% endif %}">
+          <span class="nav-icon"><img height="20" src="{% static 'images/history.svg' %}" /></span>
+          <span>QR History</span>
         </a>
       </li>
     </ul>
@@ -78,7 +84,7 @@
     </a>
     <ul class="list">
         <li><a href="{% url 'login' %}"><button class="btn">Log In</button></a></li>
-        <li><a href="{% url 'register' %}"><button class="register-btn">Sign Up</button></a></li>
+        <li><a href="{% url 'register' %}" class="link"><button class="register-btn">Sign Up</button></a></li>
     </ul>
 </nav>
 {% endif %}

@@ -53,3 +53,16 @@ class ShortUrl(models.Model):
     def qr_code_url(self):
         return get_absolute_url(self.qr_code.url)
 
+class QRCode(models.Model):
+    #link, text, data, etc turning into qr
+    data = models.TextField()
+    qr_code = models.ImageField(upload_to='images/QRcodes/', null=True, blank=True)
+
+    created_by=models.ForeignKey(User, on_delete=models.CASCADE)
+
+    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    def qr_code_url(self):
+        return get_absolute_url(self.qr_code.url)
+

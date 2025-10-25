@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+{% block content %}
+{% load static %}
+<section class="result-container">
+  <div class="result-card">
+    <h2>✨ Your QR code is Ready!</h2>
+
+    <div class="url-block">
+      <label>Original Data:</label>
+      <p class="original-url">{{ result.data }}</p>
+    </div>
+
+    <div class="qr-section qr-result">
+      <h3>QR Code</h3>
+      <img src="{{ result.qr_code_url }}" alt="QR Code" class="qr-image" />
+      <a href="{{result.qr_code_url}}" download class="link"><button class="register-btn"><img height="20" src="{% static 'images/download.svg' %}" /> Download</button></a>
+    </div>
+  </div>
+</section>
+
+<script>
+
+</script>
+{% endblock %}

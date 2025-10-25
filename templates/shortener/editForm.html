@@ -1,0 +1,40 @@
+{% extends 'index.html' %}
+
+{% block content %}
+{% if error %}
+  <p class="error">{{ error }}</p>
+{% endif %}
+
+<main class="form-container">
+  <section class="form-card">
+    <h2>Edit Short URL</h2>
+    <p class="subtitle">Update the details of your short link below.</p>
+
+    <form method="POST" action="{% url 'edit' link.id %}" class="url-form">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="long_url">Long URL</label>
+        <input type="url" id="long_url" name="long_url" value="{{ link.original_link }}" placeholder="https://example.com/your-long-link" required />
+      </div>
+
+      <div class="form-group">
+        <label for="custom_short_url">Custom short URL</label>
+        <input type="text" id="custom_alias" name="custom_short_url" value="{% if link.custom_short_url %}{{link.custom_short_url}}{%else%}{% endif %}" placeholder="my-custom-link" />
+      </div>
+
+      <div class="form-group">
+        <label for="expiration_date">Expiration Date</label>
+        <input type="date" id="expiration_date" name="expiration_date" value="{{ link.expiration_date|date:'Y-m-d' }}" />
+      </div>
+
+      <div class="form-group checkbox">
+        <input type="checkbox" id="generate_qr" name="generate_qr" {% if link.qr_code %}checked{% endif %}/>
+        <label for="generate_qr">Generate QR Code</label>
+      </div>
+
+      <button type="submit" class="submit-btn">Update Short URL</button>
+    </form>
+  </section>
+</main>
+{% endblock %}

@@ -1,6 +1,6 @@
 from pathlib import Path
 import os
-from decouple import Config , RepositoryEnv
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -9,19 +9,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-nkb3o#@#glb9*8qukc4o0tqayqf^g(41-2)r@70w05m6z8ff-4'
+SECRET_KEY = 'django-insecure-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool, default=False) 
+
+WEBSITE_URL = config('WEBSITE_URL')
+
+ALLOWED_HOSTS = [
+    '.railway.app'
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.railway.app'
+]
 
 if DEBUG:
-    config = Config(repository=RepositoryEnv('.env.dev'))
-    WEBSITE_URL = config('WEBSITE_URL')
-else:
-    WEBSITE_URL = Config('WEBSITE_URL')
-
-
-ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['*']
 
 
 # Application definition
