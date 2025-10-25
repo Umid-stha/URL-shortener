@@ -1,0 +1,84 @@
+{% load static %}
+{% if request.user.is_authenticated %}
+<style>
+  body{
+    margin-left: 280px;
+  }
+  
+  .sidebar-container {
+    position: fixed;
+    width: 280px;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+  }
+</style>
+<div class="sidebar-container">
+  <div class="sidebar-header">
+    <a class="sidebar-logo" href="{% url 'home' %}">
+      <img src="{% static 'images/logo.png' %}" alt="Logo">
+      <span>URL<span class="accent">Shortener</span></span>
+    </a>
+  </div>
+
+  <nav class="sidebar-nav">
+    <ul>
+      <li>
+        <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'my-links' %}active{% endif %}">
+          <span class="nav-icon"><img height="20" src="{% static 'images/mylinks.svg' %}" /></span>
+          <span>My Links</span>
+        </a>
+      </li>
+      <li>
+        <a href="#qr-generator">
+          <span class="nav-icon"><img height="20" src="{% static 'images/qrcode.svg' %}" /></span>
+          <span>QR Generator</span>
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'form' %}" class="{% if request.resolver_match.url_name == 'form' %}active{% endif %}">
+          <span class="nav-icon"><img height="20" src="{% static 'images/shortner.svg' %}" /></span>
+          <span>Link Shortener</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <div class="user-avatar">
+        {{ request.user.username|slice:":1"|upper }}
+      </div>
+      <div class="user-details">
+        <p class="user-name">{{ request.user.username }}</p>
+      </div>
+    </div>
+    <a href="{% url 'logout' %}" style="text-decoration: none;">
+      <button class="logout-btn">
+        <span class="nav-icon"><img height="15" src="{% static 'images/logout.png' %}" /></span>
+        <span>Logout</span>
+      </button>
+    </a>
+  </div>
+</div>
+
+{% else %}
+<!-- Original navbar for non-authenticated users -->
+<nav class="nav">
+    <a class="link" href="{% url 'home' %}">
+        <div class="logo">
+            <img height="20" src="{% static 'images/logo.png' %}">
+            <span>URL<span class="accent">Shortener</span></span>
+        </div>
+    </a>
+    <ul class="list">
+        <li><a href="{% url 'login' %}"><button class="btn">Log In</button></a></li>
+        <li><a href="{% url 'register' %}"><button class="register-btn">Sign Up</button></a></li>
+    </ul>
+</nav>
+{% endif %}

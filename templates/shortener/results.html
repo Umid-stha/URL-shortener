@@ -1,0 +1,53 @@
+{% extends "index.html" %}
+{% block content %}
+<section class="result-container">
+  <div class="result-card">
+    <h2>✨ Your Short URL is Ready!</h2>
+
+    <div class="url-block">
+      <label>Original URL:</label>
+      <p class="original-url">{{ result.original_link }}</p>
+    </div>
+
+    <div class="url-block">
+      <label>Short URL:</label>
+      <div class="short-url-box">
+        <input
+          id="shortUrl"
+          type="text"
+          value="{{ result.shortend_link  }}"
+          readonly
+          class="short-url-input"
+        />
+        <button class="copy-btn" onclick="copyToClipboard()">Copy</button>
+      </div>
+    </div>
+
+    {% if result.expiration_date %}
+      <div class="expiration-date">
+        <label>Expiration Date:</label>
+        <p class="expiration-date-text">{{ result.expiration_date }}</p>
+      </div>
+    {% endif %}
+
+    {% if result.qr_code %}
+    <div class="qr-section">
+      <h3>QR Code</h3>
+      <img src="{{ result.qr_code_url }}" alt="QR Code" class="qr-image" />
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+  function copyToClipboard() {
+    const input = document.getElementById("shortUrl");
+    input.select();
+    input.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(input.value);
+    const btn = document.querySelector(".copy-btn");
+    btn.innerText = "Copied!";
+    setTimeout(() => (btn.innerText = "Copy"), 2000);
+  }
+</script>
+{% endblock %}

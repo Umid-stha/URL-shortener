@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <title>NOT Found</title>
+</head>
+<body>
+    <div>
+        <h1>Oops! the following error occured while trying to access this page</h1> 
+        <h1>{{error}}</h1>
+        <a class="link" href="{% url 'home' %}">
+            <button class="btn">Return to home</button>
+        </a>
+    </div>
+</body>
+</html>

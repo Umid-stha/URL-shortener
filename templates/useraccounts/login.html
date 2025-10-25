@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+{% block content %}
+        <form class="form" method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <h3 class="form-heading">Login</h3>
+            <div class="register-fields">
+                <label>Username:</label>
+                <input class="input" type="text" name="username" />
+                <label>Password:</label>
+                <input class="input" type="password" name="password" />
+                {% if error %}
+                    <span class="error-message">{{ error }}</span>
+                {% endif %}
+                <button class="btn" type="submit">Login</button>
+            </div>
+        </form>
+{% endblock %}

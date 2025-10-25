@@ -1,0 +1,109 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="links-container">
+  <div class="header-section">
+    <h1 class="page-title">My Links</h1>
+    <a href="{% url 'form' %}" class="create-link-btn">+ Create New Link</a>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Total Links</div>
+      <div class="stat-value">{{ links.count }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Clicks</div>
+      <div class="stat-value">{{ total_clicks }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Active Links</div>
+      <div class="stat-value">{{ active_links }}</div>
+    </div>
+  </div>
+
+
+  {% if links %}
+  <div class="links-list">
+    {% for link in links %}
+    <div class="link-card">
+      <div class="link-header">
+        {% if link.qr_code %}
+            <img height="150" src="{{link.qr_code_url}}" />
+        {% endif %}
+        <div class="link-info">
+          <div class="original-url">
+            {{ link.original_link|truncatechars:60 }}
+            {% if link.expiration_date %}
+              {% now "Y-m-d" as today %}
+              {% if link.expiration_date|date:"Y-m-d" < today %}
+                <span class="expired-badge">EXPIRED</span>
+              {% endif %}
+            {% endif %}
+          </div>
+          
+          <div class="short-url-container">
+            <a href="{{ link.shortend_link }}" target="_blank" class="short-url">
+              {{ link.shortend_link }}
+            </a>
+            <button class="copy-btn" onclick="copyToClipboard('{{ link.shortend_link }}')">
+              Copy
+            </button>
+          </div>
+        </div>
+
+        <div class="link-actions">
+          {% if link.qr_code %}
+          <a href="{{ link.qr_code.url }}" target="_blank">
+            <button class="action-btn qr-btn">QR Code</button>
+          </a>
+          {% else %}
+          <form action="{% url 'generate-qr' link.id %}">
+            <button type="submit" class="action-btn qr-btn">Generate QR Code</button>
+          </form>
+          {% endif %}
+          <a href="{% url 'edit' link.id %}">
+            <button class="action-btn edit-btn">Edit</button>
+          </a>
+          <form method="POST" action="{% url 'delete' link.id %}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this link?');">
+            {% csrf_token %}
+            <button type="submit" class="action-btn delete-btn">Delete</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="link-meta">
+        <div class="meta-item">
+          <span><span class="meta-value">{{ link.clicks }}</span> clicks</span>
+        </div>
+        <div class="meta-item">
+          <span>Created: <span class="meta-value">{{ link.created_at|date:"M d, Y" }}</span></span>
+        </div>
+        {% if link.expiration_date %}
+        <div class="meta-item">
+          <span>Expires: <span class="meta-value">{{ link.expiration_date|date:"M d, Y" }}</span></span>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h2 class="empty-state-title">No links yet</h2>
+    <p class="empty-state-text">Create your first shortened link to get started!</p>
+    <a href="{% url 'form' %}" class="create-link-btn">Create Your First Link</a>
+  </div>
+  {% endif %}
+</div>
+
+<script>
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(function() {
+    // Optional: Show a temporary success message
+  }, function(err) {
+    console.error('Could not copy text: ', err);
+  });
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'index.html' %}
+
+{% block content %}
+{% load static %}
+    <main class="home-container">
+        <section class="hero">
+            <h1 class="hero-title">Shorten Your Links. Simplify Your Sharing.</h1>
+            <p class="hero-subtitle">
+                A minimal and smart URL shortener that keeps your links organized and trackable.
+            </p>
+
+            {% if request.user.is_authenticated %}
+                <form method="POST" action="{% url 'home' %}" class="shorten-form">
+                    {% csrf_token %}
+                    <input type="url" name="long_url" placeholder="Enter your long URL..." required />
+                    <button type="submit">Shorten URL</button>
+                </form>
+            {% else %}
+                <p class="hero-subtitle">
+                    User's need to be logged in to use URL shortening.
+                </p>
+                <a href="{% url 'login' %}" class="link"><button class="btn">Login Now!</button></a>
+            {% endif %}
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+            <h3>🔒 Secure</h3>
+            <p>Your links are private and tied to your account only.</p>
+            </div>
+            <div class="feature-card">
+            <h3>📊 Analytics</h3>
+            <p>Track how many people click on your links.</p>
+            </div>
+            <div class="feature-card">
+            <h3>⚙️ Customizable</h3>
+            <p>Set expiration dates for your links.</p>
+            </div>
+        </section>
+    </main>
+{% endblock %}
