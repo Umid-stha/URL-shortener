@@ -36,6 +36,7 @@ def form(request):
                 link.expiration_date = expiration_date
             if generate_QR=='on':
                 qr_filename, buffer = create_QR_code(link.shortend_link(), link.short_url)
+                buffer.seek(0)
                 link.qr_code.save(qr_filename, File(buffer), save=False)
             link.save()
             return redirect('result', id=link.id)
@@ -48,7 +49,7 @@ def form(request):
 def generate_qr_for_short_url(request, id):
     link = get_object_or_404(ShortUrl, id=id)
     qr_filename, buffer = create_QR_code(link.shortend_link(), link.short_url)
-    print(qr_filename, buffer)
+    buffer.seek(0)
     link.qr_code.save(qr_filename, File(buffer), save=False)
     link.save()
     return render(request, 'shortener/results.html', {'result': link})
@@ -86,6 +87,7 @@ def edit_link(request, id):
             link.expiration_date = expiration_date
         if generate_QR=='on':
             qr_filename, buffer = create_QR_code(link.shortend_link(), link.short_url)
+            buffer.seek(0)
             link.qr_code.save(qr_filename, File(buffer), save=False)
         link.save()
         url = reverse('result', kwargs={'id': link.id}) + "?edit=true"
@@ -128,6 +130,7 @@ def qr_code_generator(request):
             data = request.POST.get('data')
             name, buffer = create_QR_code(data, data[10:20])
             instance = QRCode.objects.create(data=data, created_by=request.user)
+            buffer.seek(0)
             instance.qr_code.save(name, File(buffer), save=True)
             return redirect('qr-result', id=instance.id)
         except Exception as e:
