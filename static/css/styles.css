@@ -61,6 +61,11 @@ body {
   color: inherit;
 }
 
+.error {
+  color: var(--color-error);
+  text-align: center;
+}
+
 .nav {
     display: flex;
     justify-content: space-between;
