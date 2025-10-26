@@ -161,7 +161,8 @@ if DEBUG:
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 import os
-import logging
+
+os.makedirs(MEDIA_ROOT, exist_ok=True)
 
 LOGGING = {
     'version': 1,
@@ -183,7 +184,7 @@ LOGGING = {
         },
         'file': {  
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'media', 'app.log'),
+            'filename': os.path.join(MEDIA_ROOT, 'app.log'),
             'formatter': 'verbose',
         },
     },
