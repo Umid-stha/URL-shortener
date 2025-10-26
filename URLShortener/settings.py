@@ -141,18 +141,23 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
 
-STORAGES = {
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
-
-
 MEDIA_ROOT = "/app/media"
 MEDIA_URL = "/media/"
 if DEBUG:
     MEDIA_ROOT = BASE_DIR / "media"
     MEDIA_URL = "/media/"
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "OPTIONS": {
+            "location": "/app/media",
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 
 # Default primary key field type
