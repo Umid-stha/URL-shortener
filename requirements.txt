@@ -5,3 +5,4 @@ qrcode
 gunicorn
 psycopg[binary]
 dj-database-url
+whitenoise[brotli]

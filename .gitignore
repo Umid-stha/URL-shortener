@@ -216,3 +216,5 @@ __marimo__/
 .streamlit/secrets.toml
 
 media/
+
+static_root/
