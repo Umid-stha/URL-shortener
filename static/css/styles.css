@@ -66,7 +66,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 16px 24px;
-    background: var(--color-surface);
+    background: var(--color-bg);
     box-shadow: var(--shadow-sm);
   }
   
@@ -75,7 +75,7 @@ body {
     align-items: center;
     gap: 8px;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 22px;
   }
   
   .accent {
@@ -89,6 +89,11 @@ body {
     margin: 0;
     padding: 0;
     align-items: center;
+  }
+
+  .error {
+    color: var(--color-error);
+    text-align: center;
   }
   
   .btn, .register-btn {

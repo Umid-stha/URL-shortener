@@ -16,6 +16,7 @@ def home(request):
 
 @login_required
 def form(request):
+    context = {}
     if request.method == 'POST':
         long_url = request.POST.get('long_url')
         custom_short_url = request.POST.get('custom_short_url', None)
@@ -29,7 +30,7 @@ def form(request):
                 )
             if custom_short_url:
                 if ShortUrl.objects.filter(custom_short_url=custom_short_url).exists():
-                    return render(request, 'shortener/linkForm.html', {'error': 'This custom short URL is already taken.'})
+                    raise Exception("Custom URL already taken")
                 else:
                     link.custom_short_url = custom_short_url
             if expiration_date:
@@ -40,9 +41,9 @@ def form(request):
             link.save()
             return redirect('result', id=link.id)
         except Exception as e:
-            print(e)
-            return render(request, 'shortener/linkForm.html', {'error': 'An error occurred. Please try again later.'})
-    return render(request, 'shortener/linkForm.html')
+            link.delete()
+            context['error']=str(e)
+    return render(request, 'shortener/linkForm.html', context=context)
 
 @login_required
 def generate_qr_for_short_url(request, id):
@@ -72,24 +73,27 @@ def dashboard(request):
 def edit_link(request, id):
     link = get_object_or_404(ShortUrl, id=id)
     if request.method == "POST":
-        long_url = request.POST.get('long_url')
-        custom_short_url = request.POST.get('custom_short_url', None)
-        expiration_date = request.POST.get('expiration_date', None)
-        generate_QR = request.POST.get('generate_qr')
-        link.original_link = long_url
-        if custom_short_url and custom_short_url != link.custom_short_url:
-            if ShortUrl.objects.filter(custom_short_url=custom_short_url).exists():
-                return render(request, 'shortener/editForm.html', {'error': 'This custom short URL is already taken.'})
-            else:
-                link.custom_short_url = custom_short_url
-        if expiration_date:
-            link.expiration_date = expiration_date
-        if generate_QR=='on':
-            qr_filename, buffer = create_QR_code(link.shortend_link(), link.short_url)
-            link.qr_code.save(qr_filename, File(buffer), save=False)
-        link.save()
-        url = reverse('result', kwargs={'id': link.id}) + "?edit=true"
-        return redirect(url)
+        try:
+            long_url = request.POST.get('long_url')
+            custom_short_url = request.POST.get('custom_short_url', None)
+            expiration_date = request.POST.get('expiration_date', None)
+            generate_QR = request.POST.get('generate_qr')
+            link.original_link = long_url
+            if custom_short_url and custom_short_url != link.custom_short_url:
+                if ShortUrl.objects.filter(custom_short_url=custom_short_url).exists():
+                    raise Exception("custom url already taken")
+                else:
+                    link.custom_short_url = custom_short_url
+            if expiration_date:
+                link.expiration_date = expiration_date
+            if generate_QR=='on':
+                qr_filename, buffer = create_QR_code(link.shortend_link(), link.short_url)
+                link.qr_code.save(qr_filename, File(buffer), save=False)
+            link.save()
+            url = reverse('result', kwargs={'id': link.id}) + "?edit=true"
+            return redirect(url)
+        except Exception as e:
+            return render(request, 'shortener/editForm.html', {'link': link, 'error': str(e)})
     else:
         return render(request, 'shortener/editForm.html', {'link': link})
 
