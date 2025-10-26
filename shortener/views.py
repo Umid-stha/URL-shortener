@@ -7,6 +7,9 @@ from django.http import HttpResponsePermanentRedirect
 from django.db.models import Q, Sum
 from django.core.files import File
 from django.urls import reverse
+import logging
+
+logger = logging.getLogger('__name__')
 
 def home(request):
     if request.method == 'POST':
@@ -132,9 +135,10 @@ def qr_code_generator(request):
             instance = QRCode.objects.create(data=data, created_by=request.user)
             buffer.seek(0)
             instance.qr_code.save(name, File(buffer), save=True)
+            logger.info(f"QR code generated for {data}")
             return redirect('qr-result', id=instance.id)
         except Exception as e:
-            print(e)
+            logger.error(f"❌ QR generation failed for reason : {e}", exc_info=True)
     return render(request, 'shortener/qrgen.html')
 
 @login_required
